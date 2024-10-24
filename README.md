@@ -1,1 +1,1 @@
-Both the tasks are in the app.js file
+Welcome page, Todo List, Product List and Profile Page using EJS
