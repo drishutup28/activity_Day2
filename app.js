@@ -43,6 +43,8 @@ let catalog = [
 ]
 let posts = [];
 let contacts = [];
+let isLoggedIn = false;
+let currUser = null;
 
 function time(){
     const hour = new Date().getHours();
@@ -149,6 +151,41 @@ app.post("/catalog", upload.single('image'), (req, res) => {
     const image = req.file ? req.file.filename : null;
     if (name && description && image) catalog.push({name, description, image});
     res.redirect("/catalog");
+});
+
+app.get("/", (req, res) => {
+    res.redirect("/nav");
+});
+
+app.get("/nav", (req, res) => {
+    res.render('nav', {isLoggedIn, currUser});
+});
+
+app.get("/profile", (req, res) => {
+    if (isLoggedIn && currUser) {
+        res.send(<h1>Profile Page</h1><p>Welcome, ${currUser}!</p>);
+    } else {
+        res.redirect("/login");
+    }
+});
+
+app.get("/login", (req, res) => {
+    res.render('login');
+});
+
+app.post("/login", (req, res) => {
+    const{username} = req.body;
+    if(username){
+        isLoggedIn = true;
+        currUser = username;
+    }
+    res.redirect("/nav");
+});
+
+app.post("/logout", (req, res) => {
+    isLoggedIn = false;
+    currUser = null;
+    res.redirect("/nav");
 });
 
 app.listen(PORT, (err) => {
