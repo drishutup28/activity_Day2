@@ -1,0 +1,9 @@
+
+1. Find Orders Above a Certain Amount with a Specific Status :-
+ db.orders.find({orderTotal: {$gt: 100}}, {orderStatus: "shipped"})
+
+2. Total Quantity of Products Sold by Category :-
+ db.sales.aggregate([{$group: {_id: "$category", totalQuantity: {$sum: 1}}}])
+
+3. Join User Details with Orders Using $lookup :-
+ db.users.aggregate([{$lookup: {"from": "orders", "localField": "userId", "foreignField": "userId", "as": "userOrders"}}])
